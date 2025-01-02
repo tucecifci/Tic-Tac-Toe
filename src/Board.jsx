@@ -6,10 +6,9 @@ function Board() {
   const [xIsNext, setXIsNext] = useState(true);
 
   function handleClick(index) {
-    if (squares[index]) {
+    if (squares[index] || calculateWinner(squares)) {
       return;
     }
-
     const nextSquares = squares.slice(); //arrayin kopyasını alıyor
     if (xIsNext) {
       nextSquares[index] = "X";
@@ -19,8 +18,18 @@ function Board() {
     setSquares(nextSquares);
     setXIsNext(!xIsNext); //oyuncu sırasını değiştirmek
   }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if(winner){
+    status = `Winner: ${winner}`;
+  }else{
+    status = "Next Player:" + (xIsNext ? "X" : "O");
+  }
+
   return (
     <>
+    <div className="status">{status} </div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
